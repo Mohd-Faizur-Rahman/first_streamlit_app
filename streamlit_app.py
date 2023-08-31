@@ -39,7 +39,7 @@ try:
     streamlit.dataframe(returned_output)
 except urlerror as e:
   streamlit.error()
-streamlit.write('The user entered ', returned_output)
+#streamlit.write('The user entered ', returned_output)
 
 
 # normalize your json result
