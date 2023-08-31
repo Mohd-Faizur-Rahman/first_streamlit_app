@@ -23,19 +23,23 @@ fruits_selected = streamlit.multiselect("Pick some fruits:", list(my_fruit_list.
 fruits_to_show = my_fruit_list.loc[fruits_selected]
 # Display the table on the page
 streamlit.dataframe(fruits_to_show)
-
+#creating a function for fruit advice
+def get_fruitvice_advice(fruit_selected):
+  fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_selected)
+  fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
+  return fruityvice_normalized
+  
 streamlit.header('FruityVice Fruit Advice')
 try:
   fruit_choice = streamlit.text_input('What fruit would you like information about?')
   if not fruit_choice:
     streamlit.error('please select a fruit to get information')
   else:
-    fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-    fruityvice_normalized = pandas.json_normalize(fruityvice_response.json())
-    streamlit.dataframe(fruityvice_normalized)
+    returned_output = get_fruitvice_advice(fruit_choice)
+    streamlit.dataframe(returned_output)
 except urlerror as e:
   streamlit.error()
-streamlit.write('The user entered ', fruit_choice)
+streamlit.write('The user entered ', returned_output)
 
 
 # normalize your json result
